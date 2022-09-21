@@ -34,7 +34,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     Align(
                         alignment: Alignment.bottomLeft,
                         child: Text(
-                          Stringconstraints.hint_login_enterpassword,
+                          Stringconstraints.enterOTP,
                           style: TextStyle(
                             height: 5,
                             fontSize: 20,
