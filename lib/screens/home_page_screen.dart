@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutterapptask/constants/color_constants.dart';
 import 'package:flutterapptask/constants/string_constants.dart';
 import 'package:flutterapptask/models/listpoji.dart';
+import 'package:flutterapptask/screens/helpsupport.dart';
+import 'package:flutterapptask/screens/notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterapptask/providers/home_page_provider.dart';
 import 'package:flutterapptask/screens/details_page_screen.dart';
@@ -28,9 +30,23 @@ class _HomePageScreenState extends State<HomePageScreen> {
     return Consumer<HomePageProvider>(
         builder: (context, HomePageProvider homePageProvider, snapshot) {
       return Scaffold(
-          appBar: AppBar(
-            title: const Text('Home'),
-          ),
+          appBar: AppBar(title: const Text('Home'), actions: [
+            IconButton(
+              icon: Icon(Icons.help),
+              onPressed: () {
+                NavigationServices.changeScreen(context, helpsupport());
+              },
+            ),
+            IconButton(
+                icon: Icon(
+                  Icons.notifications,
+                ),
+                onPressed: () {
+                  print('Notifications');
+                  NavigationServices.changeScreen(
+                      context, Notificationsscreen());
+                }),
+          ]),
           backgroundColor: Colors.white,
           body: SafeArea(
             child: Column(
@@ -40,6 +56,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   child: SizedBox(child: _autoCompleteName(homePageProvider)),
                 ),
                 Expanded(
+                  flex: 4,
                   child: ListView.builder(
                       itemCount: homePageProvider.teamMatesModelList.length,
                       itemBuilder: (context, index) {
@@ -111,6 +128,101 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               NavigationServices.changeScreen(
                                   context, const DetailsPageScreen());
                             },
+                          ),
+                        );
+                      }),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.amber,
+                  child: Text(
+                    'Store View',
+                    style: TextStyle(
+                        color: Colors.white,
+
+                        //backgroundColor: Colors.grey,
+                        fontSize: 20),
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                      // scrollDirection: Axis.horizontal,
+
+                      itemCount: homePageProvider.teamMatesModelList.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 5, 10, 5),
+                          child: InkWell(
+                            child: Container(
+                              //color: Colors.grey,
+                              //  alignment: AlignmentGeometry(Colors.accents),
+
+                              child: Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 150,
+                                      width: 150,
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 0, 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey,
+                                                spreadRadius: 0.5,
+                                                blurRadius: 0.5)
+                                          ]),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.all(10),
+                                            alignment: Alignment.center,
+                                            width: 80,
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Color(0xFFe0f2f1)),
+                                            child: Text(
+                                              homePageProvider
+                                                  .teamMatesModelList[index]
+                                                  .name![0]
+                                                  .toUpperCase(),
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.indigoAccent),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.all(10),
+                                            child: Text(
+                                              homePageProvider
+                                                  .teamMatesModelList[index]
+                                                  .name!
+                                                  .toUpperCase(),
+                                              style: TextStyle(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                         );
                       }),
