@@ -32,19 +32,19 @@ class _HomePageScreenState extends State<HomePageScreen> {
       return Scaffold(
           appBar: AppBar(title: const Text('Home'), actions: [
             IconButton(
-              icon: Icon(Icons.help),
+              icon: const Icon(Icons.help),
               onPressed: () {
-                NavigationServices.changeScreen(context, helpsupport());
+                NavigationServices.changeScreen(context, const helpsupport());
               },
             ),
             IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.notifications,
                 ),
                 onPressed: () {
                   print('Notifications');
                   NavigationServices.changeScreen(
-                      context, Notificationsscreen());
+                      context, const Notificationsscreen());
                 }),
           ]),
           backgroundColor: Colors.white,
@@ -56,78 +56,151 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   child: SizedBox(child: _autoCompleteName(homePageProvider)),
                 ),
                 Expanded(
-                  flex: 4,
+                  flex: 2,
                   child: ListView.builder(
                       itemCount: homePageProvider.teamMatesModelList.length,
                       itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(5, 5, 10, 5),
-                          child: InkWell(
-                            child: Container(
-                              //color: Colors.grey,
+                        return InkWell(
+                          onTap: () {
+                            homePageProvider.chosenIndex = index;
+                            NavigationServices.changeScreen(
+                                context, const DetailsPageScreen());
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(5, 5, 10, 5),
+                            child: SizedBox(
+                              height: 100,
+                              width: 100,
+                              // child: Text('hi'),
 
-                              child: Padding(
-                                padding: const EdgeInsets.all(0),
-                                child: Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.grey,
-                                            spreadRadius: 0.5,
-                                            blurRadius: 0.5)
-                                      ]),
-                                  child: ListTile(
-                                    leading: Container(
-                                      alignment: Alignment.center,
-                                      width: 80,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color(0xFFe0f2f1)),
-                                      child: Text(
-                                        homePageProvider
-                                            .teamMatesModelList[index].name![0]
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.indigoAccent),
-                                      ),
+                              child: Container(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      const BoxShadow(
+                                          color: Colors.grey,
+                                          spreadRadius: 0.5,
+                                          blurRadius: 0.5)
+                                    ]),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          child: Text(
+                                            homePageProvider
+                                                .teamMatesModelList[index]
+                                                .country!
+                                                .toUpperCase(),
+                                            maxLines: 1,
+                                            textAlign: TextAlign.start,
+                                            style: const TextStyle(
+                                                overflow: TextOverflow.ellipsis,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                        )),
+                                    VerticalDivider(
+                                      color: Colors.grey,
+                                      thickness: 1,
                                     ),
-                                    subtitle: Container(
-                                      padding: EdgeInsets.all(2),
-                                      margin: EdgeInsets.all(5),
-                                      child: Text(
-                                        homePageProvider
-                                            .teamMatesModelList[index]
-                                            .stateProvince!,
-                                      ),
+                                    Expanded(
+                                        flex: 4,
+                                        child: Container(
+                                          margin: const EdgeInsets.all(10),
+                                          alignment: Alignment.center,
+                                          width: 80,
+                                          height: 80,
+                                          decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFFe0f2f1)),
+                                          child: Text(
+                                            homePageProvider
+                                                .teamMatesModelList[index]
+                                                .name![0]
+                                                .toUpperCase(),
+                                            style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.indigoAccent),
+                                          ),
+                                        )),
+                                    VerticalDivider(
+                                      thickness: 1,
+                                      color: Colors.grey,
                                     ),
-                                    title: Container(
-                                      padding: EdgeInsets.all(2),
-                                      margin: EdgeInsets.all(5),
-                                      child: Text(
-                                        homePageProvider
-                                            .teamMatesModelList[index].name!,
-                                        style: TextStyle(
-                                            //overflow: TextOverflow.ellipsis,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 20),
-                                      ),
+                                    Expanded(
+                                        flex: 8,
+                                        child: Container(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                child: Align(
+                                                  child: Center(
+                                                    child: Text(
+                                                      homePageProvider
+                                                          .teamMatesModelList[
+                                                              index]
+                                                          .name!
+                                                          .toUpperCase(),
+                                                      maxLines: 1,
+                                                      style: const TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.black),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  homePageProvider
+                                                      .teamMatesModelList[index]
+                                                      .stateProvince!,
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      color: Colors.black),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )),
+                                    VerticalDivider(
+                                      color: Colors.grey,
+                                      thickness: 1,
                                     ),
-                                  ),
+                                    Expanded(
+                                        flex: 4,
+                                        child: Container(
+                                          child: Text(
+                                            homePageProvider
+                                                .teamMatesModelList[index]
+                                                .stateProvince!,
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                                overflow: TextOverflow.ellipsis,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black),
+                                          ),
+                                        )),
+                                  ],
                                 ),
                               ),
                             ),
-                            onTap: () {
-                              homePageProvider.chosenIndex = index;
-                              NavigationServices.changeScreen(
-                                  context, const DetailsPageScreen());
-                            },
                           ),
                         );
                       }),
@@ -135,7 +208,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 Container(
                   width: MediaQuery.of(context).size.width,
                   color: Colors.amber,
-                  child: Text(
+                  child: const Text(
                     'Store View',
                     style: TextStyle(
                         color: Colors.white,
@@ -147,7 +220,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 Expanded(
                   flex: 4,
                   child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                       ),
                       // scrollDirection: Axis.horizontal,
@@ -175,7 +249,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                               BorderRadius.circular(10),
                                           color: Colors.white,
                                           boxShadow: [
-                                            BoxShadow(
+                                            const BoxShadow(
                                                 color: Colors.grey,
                                                 spreadRadius: 0.5,
                                                 blurRadius: 0.5)
@@ -183,11 +257,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                       child: Column(
                                         children: [
                                           Container(
-                                            margin: EdgeInsets.all(10),
+                                            margin: const EdgeInsets.all(10),
                                             alignment: Alignment.center,
                                             width: 80,
                                             height: 80,
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 color: Color(0xFFe0f2f1)),
                                             child: Text(
@@ -195,20 +269,20 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                                   .teamMatesModelList[index]
                                                   .name![0]
                                                   .toUpperCase(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.indigoAccent),
                                             ),
                                           ),
                                           Container(
-                                            margin: EdgeInsets.all(10),
+                                            margin: const EdgeInsets.all(10),
                                             child: Text(
                                               homePageProvider
                                                   .teamMatesModelList[index]
                                                   .name!
                                                   .toUpperCase(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   fontSize: 14,
@@ -254,13 +328,14 @@ class _HomePageScreenState extends State<HomePageScreen> {
           FocusNode fieldFocusNode,
           VoidCallback onFieldSubmitted) {
         return Container(
-          padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
-          margin: EdgeInsets.all(12),
+          padding: const EdgeInsets.fromLTRB(15, 5, 10, 5),
+          margin: const EdgeInsets.all(12),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.white,
               boxShadow: [
-                BoxShadow(color: Colors.grey, spreadRadius: 1, blurRadius: 2)
+                const BoxShadow(
+                    color: Colors.grey, spreadRadius: 1, blurRadius: 2)
               ]),
           child: Center(
               child: Column(
@@ -317,15 +392,16 @@ class _HomePageScreenState extends State<HomePageScreen> {
                         child: ListTile(
                           title: Container(
                             height: 100,
-                            padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
-                            margin: EdgeInsets.all(1),
+                            padding: const EdgeInsets.fromLTRB(15, 5, 10, 5),
+                            margin: const EdgeInsets.all(1),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
-                                      color: Color.fromRGBO(158, 158, 158, 1)
-                                          .withOpacity(0.2),
+                                      color:
+                                          const Color.fromRGBO(158, 158, 158, 1)
+                                              .withOpacity(0.2),
                                       spreadRadius: 1,
                                       blurRadius: 5)
                                 ]),
@@ -347,7 +423,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                               BorderRadius.circular(10),
                                           color: Colors.white,
                                           boxShadow: [
-                                            BoxShadow(
+                                            const BoxShadow(
                                                 color: Colors.white24,
                                                 spreadRadius: 3,
                                                 blurRadius: 10)
@@ -357,7 +433,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                           alignment: Alignment.center,
                                           width: 80,
                                           height: 80,
-                                          decoration: BoxDecoration(
+                                          decoration: const BoxDecoration(
                                               shape: BoxShape.circle,
                                               color: Color(0xFFe0f2f1)),
                                           child: Text(
@@ -366,7 +442,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                                 .name![0]
                                                 .toUpperCase(),
                                             maxLines: 1,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 overflow: TextOverflow.ellipsis,
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
@@ -374,8 +450,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                           ),
                                         ),
                                         subtitle: Container(
-                                          padding: EdgeInsets.all(2),
-                                          margin: EdgeInsets.all(5),
+                                          padding: const EdgeInsets.all(2),
+                                          margin: const EdgeInsets.all(5),
                                           child: Text(
                                             homePageProvider
                                                 .teamMatesModelList[index]
@@ -383,14 +459,14 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                           ),
                                         ),
                                         title: Container(
-                                          padding: EdgeInsets.all(2),
-                                          margin: EdgeInsets.all(5),
+                                          padding: const EdgeInsets.all(2),
+                                          margin: const EdgeInsets.all(5),
                                           child: Text(
                                             homePageProvider
                                                 .teamMatesModelList[index]
                                                 .name!,
                                             maxLines: 1,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 overflow: TextOverflow.ellipsis,
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: 20),

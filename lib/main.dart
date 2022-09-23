@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapptask/providers/notification_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterapptask/constants/string_constants.dart';
 import 'package:flutterapptask/providers/app_provider.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => LoginProvider()),
         ChangeNotifierProvider(create: (context) => AppProvider()),
         ChangeNotifierProvider(create: (context) => HomePageProvider()),
+        ChangeNotifierProvider(create: (context) => NotificationProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
