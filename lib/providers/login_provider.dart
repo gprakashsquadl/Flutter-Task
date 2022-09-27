@@ -26,7 +26,7 @@ class LoginProvider with ChangeNotifier {
 
   void SendOTP(BuildContext context) async {
     if (mobilenum.text.length > 9) {
-      NavigationServices.replaceScreen(context, OTPScreen());
+      // NavigationServices.replaceScreen(context, OTPScreen());
     } else {
       Fluttertoast.showToast(msg: Stringconstraints.error_login_entermobilenum);
     }

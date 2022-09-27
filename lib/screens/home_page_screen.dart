@@ -3,11 +3,13 @@ import 'package:flutterapptask/constants/color_constants.dart';
 import 'package:flutterapptask/constants/string_constants.dart';
 import 'package:flutterapptask/models/listpoji.dart';
 import 'package:flutterapptask/screens/helpsupport.dart';
+import 'package:flutterapptask/screens/login_screen.dart';
 import 'package:flutterapptask/screens/notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterapptask/providers/home_page_provider.dart';
 import 'package:flutterapptask/screens/details_page_screen.dart';
 import 'package:flutterapptask/services/navigation_services.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({Key? key}) : super(key: key);
@@ -43,8 +45,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 ),
                 onPressed: () {
                   print('Notifications');
-                  NavigationServices.changeScreen(
-                      context, const Notificationsscreen());
+                  NavigationServices.changeScreen(context, const LoginScreen());
                 }),
           ]),
           backgroundColor: Colors.white,

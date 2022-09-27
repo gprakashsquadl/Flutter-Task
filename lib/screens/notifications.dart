@@ -1,96 +1,105 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutterapptask/providers/notification_provider.dart';
-import 'package:provider/provider.dart';
+import 'dart:async';
 
-class Notificationsscreen extends StatefulWidget {
-  const Notificationsscreen({Key? key}) : super(key: key);
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
-  @override
-  State<Notificationsscreen> createState() => _NotificationsscreenState();
-}
+Future<void> onBackgroundMessage(RemoteMessage message) async {
+  await Firebase.initializeApp();
 
-class _NotificationsscreenState extends State<Notificationsscreen> {
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<NotificationProvider>(context, listen: false)
-          .CallSampleList(context);
-    });
+  if (message.data.containsKey('data')) {
+    // Handle data message
+    final data = message.data['data'];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<NotificationProvider>(builder:
-        (context, NotificationProvider notificationProvider, snapshot) {
-      return Scaffold(
-        appBar: AppBar(
-          shadowColor: Colors.grey[200],
-          bottomOpacity: 1.0,
-          title: Text(
-            'YOUR CUSTOM APPBAR',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          actions: <Widget>[Icon(Icons.search)],
-          elevation: 0,
-          backgroundColor: Colors.cyan,
-          automaticallyImplyLeading: true,
-        ),
-        // appBar: AppBar(
-        //   title: Text(''),
-        // ),
-        // body: Center(
-        //   child: Container(
-        //     child: Text(notificationProvider.usesamplepoji[0].title!),
-        //   ),
-        // )
+  if (message.data.containsKey('notification')) {
+    // Handle notification message
+    final notification = message.data['notification'];
+  }
+  // Or do other work.
+}
 
-        body: ListView.builder(
-            itemCount: notificationProvider.usesamplepoji.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: Container(
-                          color: Colors.lime,
-                          child: Text(
-                            notificationProvider.usesamplepoji[index].title!,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text(
-                            notificationProvider.usesamplepoji[index].title!,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Text(
-                            notificationProvider.usesamplepoji[index].title!,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-            }),
-      );
-    });
+class FCM {
+  final _firebaseMessaging = FirebaseMessaging.instance;
+
+  final streamCtlr = StreamController<String>.broadcast();
+  final titleCtlr = StreamController<String>.broadcast();
+  final bodyCtlr = StreamController<String>.broadcast();
+
+  setNotifications() {
+    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+
+    // handle when app in active state
+    forgroundNotification();
+
+    // handle when app running in background state
+    backgroundNotification();
+
+    // handle when app completely closed by the user
+    terminateNotification();
+
+    // With this token you can test it easily on your phone
+    final token =
+        _firebaseMessaging.getToken().then((value) => print('Token: $value'));
+  }
+
+  forgroundNotification() {
+    FirebaseMessaging.onMessage.listen(
+      (message) async {
+        if (message.data.containsKey('data')) {
+          // Handle data message
+          streamCtlr.sink.add(message.data['data']);
+        }
+        if (message.data.containsKey('notification')) {
+          // Handle notification message
+          streamCtlr.sink.add(message.data['notification']);
+        }
+        // Or do other work.
+        titleCtlr.sink.add(message.notification!.title!);
+        bodyCtlr.sink.add(message.notification!.body!);
+      },
+    );
+  }
+
+  backgroundNotification() {
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (message) async {
+        if (message.data.containsKey('data')) {
+          // Handle data message
+          streamCtlr.sink.add(message.data['data']);
+        }
+        if (message.data.containsKey('notification')) {
+          // Handle notification message
+          streamCtlr.sink.add(message.data['notification']);
+        }
+        // Or do other work.
+        titleCtlr.sink.add(message.notification!.title!);
+        bodyCtlr.sink.add(message.notification!.body!);
+      },
+    );
+  }
+
+  terminateNotification() async {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      if (initialMessage.data.containsKey('data')) {
+        // Handle data message
+        streamCtlr.sink.add(initialMessage.data['data']);
+      }
+      if (initialMessage.data.containsKey('notification')) {
+        // Handle notification message
+        streamCtlr.sink.add(initialMessage.data['notification']);
+      }
+      // Or do other work.
+      titleCtlr.sink.add(initialMessage.notification!.title!);
+      bodyCtlr.sink.add(initialMessage.notification!.body!);
+    }
+  }
+
+  dispose() {
+    streamCtlr.close();
+    bodyCtlr.close();
+    titleCtlr.close();
   }
 }
